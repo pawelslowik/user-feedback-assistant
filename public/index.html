@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Feedback Assistant</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Share Your Feedback</h1>
+    <p class="subtitle">Tell us what you think. Your message can be up to 1000 characters.</p>
+
+    <form id="feedback-form" novalidate>
+      <label for="feedback">Feedback</label>
+      <textarea
+        id="feedback"
+        name="feedback"
+        rows="6"
+        maxlength="1000"
+        placeholder="Type your feedback here..."
+        required
+      ></textarea>
+      <div class="meta">
+        <span id="char-count">0 / 1000</span>
+      </div>
+      <button type="submit" id="submit-btn">Submit</button>
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
