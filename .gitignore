@@ -1,3 +1,5 @@
 node_modules/
 data/feedback.db
 dist/
+.env
+public/app.*
