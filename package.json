@@ -22,8 +22,13 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
+    "@langfuse/otel": "^5.9.0",
+    "@langfuse/tracing": "^5.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.77.0",
+    "@opentelemetry/sdk-node": "^0.219.0",
     "better-sqlite3": "^12.11.1",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "uuid": "^14.0.1"
   }
 }

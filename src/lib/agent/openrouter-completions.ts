@@ -1,11 +1,22 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import type { Message } from "./types.js";
+import { startObservation } from "@langfuse/tracing";
 
 const OPENROUTER_COMPLETIONS_API: string = process.env.OPENROUTER_COMPLETIONS_API || '';
 const OPENROUTER_API_KEY: string = process.env.OPENROUTER_API_KEY || '';
 
 export async function completions(model: string, messages: Message[], allowedTools: any[]) {
+    const generation = startObservation(
+        "llm-call",
+        {
+          model: model,
+          input: messages,
+        },
+        { asType: "generation" },
+      );
+    
+       
     const body = {
         model: model,
         tools: allowedTools,
@@ -23,5 +34,7 @@ export async function completions(model: string, messages: Message[], allowedToo
     });
 
     const json = await response.json();
+
+    generation.update({ output: json}).end();
     return json;
 }

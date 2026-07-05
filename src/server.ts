@@ -1,11 +1,14 @@
 import dotenv from 'dotenv';
 dotenv.config();
+import "./lib/instrumentation.js";
+import { startActiveObservation } from "@langfuse/tracing";
 import express from 'express';
 import type { Request, Response } from 'express'
 import path from 'path';
 import { insertFeedback } from './lib/db.js';
 import { fileURLToPath } from 'url';
 import { classifyFeedback } from './lib/agent/agent.js'
+import { v4 as uuid } from 'uuid';
 
 const app = express();
 const PORT = Number(process.env.SERVER_PORT) || 3000;
@@ -31,17 +34,34 @@ app.post('/api/feedback', async (req: Request<object, object, FeedbackBody>, res
     return res.status(400).json({ error: `Feedback must be at most ${MAX_LENGTH} characters.` });
   }
 
-  try {
-    console.log(`Processing feedback [${feedback}]`);
-    classifyFeedback(feedback).then(label => {
-      console.log(`Label [${label}] assigned to feedback [${feedback}]`);
-      insertFeedback(feedback, label);
-    }).catch(error => console.log(error));
-    return res.status(201).json({ success: true });
-  } catch (err) {
-    console.error('Failed to save feedback:', err);
-    return res.status(500).json({ error: 'Failed to process feedback.' });
-  }
+  const processId: string = uuid();
+  console.log(`Process [${processId}] processing feedback [${feedback}]`);
+
+  // Respond immediately
+  res.status(201).json({ success: true, processId: processId });
+
+  // Fire-and-forget background work
+  void startActiveObservation("feedback", async (span) => {
+    span.update({ input: { processId, feedback } });
+
+    try {
+      const label = await classifyFeedback(feedback);
+      console.log(`Label [${label}] assigned to feedback [${feedback}] in process [${processId}]`);
+
+      insertFeedback(feedback, label, processId);
+
+      span.update({
+        output: { processId, result: "Feedback successfully processed", label }
+      });
+    } catch (error) {
+      console.error(error);
+      span.update({
+        output: { processId, result: "Feedback processing failed" }
+      });
+    } finally {
+      span.end();
+    }
+  });
 });
 
 app.listen(PORT, () => {

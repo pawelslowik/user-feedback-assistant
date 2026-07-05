@@ -20,12 +20,13 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT NOT NULL,
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
-    label TEXT NOT NULL
+    label TEXT NOT NULL,
+    process_id TEXT NOT NULL
   )
 `);
 
-const insertStmt = db.prepare('INSERT INTO feedback (content, label) VALUES (?,?)');
+const insertStmt = db.prepare('INSERT INTO feedback (content, label, process_id) VALUES (?,?,?)');
 
-export function insertFeedback(content: string, label: string): RunResult {
-  return insertStmt.run(content, label);
+export function insertFeedback(content: string, label: string, procesId: string): RunResult {
+  return insertStmt.run(content, label, procesId);
 }
