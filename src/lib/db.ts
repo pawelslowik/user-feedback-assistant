@@ -26,7 +26,22 @@ db.exec(`
 `);
 
 const insertStmt = db.prepare('INSERT INTO feedback (content, label, process_id) VALUES (?,?,?)');
+const queryStmt = db.prepare('SELECT process_id, label, content FROM feedback ORDER BY created_at');
 
-export function insertFeedback(content: string, label: string, procesId: string): RunResult {
-  return insertStmt.run(content, label, procesId);
+export type FeedbackItem = {
+  processId: string;
+  content: string;
+  label: string;
+};
+
+export function insertFeedback(feedback: FeedbackItem): RunResult {
+  return insertStmt.run(feedback.content, feedback.label, feedback.processId);
+}
+
+export function queryFeedback(): FeedbackItem[] {
+  return queryStmt.all().map((row: any) => ({
+    processId: row.process_id,
+    content: row.content,
+    label: row.label,
+  }));
 }

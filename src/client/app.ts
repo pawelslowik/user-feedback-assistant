@@ -47,7 +47,7 @@ form.addEventListener('submit', async (event) => {
   submitBtn.disabled = true;
 
   try {
-    const response = await fetch('/api/feedback', {
+    const response = await fetch('/api/feedbacks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ feedback }),
@@ -68,6 +68,14 @@ form.addEventListener('submit', async (event) => {
   } finally {
     submitBtn.disabled = false;
   }
+});
+
+// SSE: connect to the feedback stream
+const source = new EventSource('/api/feedbacks/events');
+
+source.addEventListener('feedback-list', (event: Event) => {
+  const messageEvent = event as MessageEvent<string>;
+  console.log(messageEvent.data);
 });
 
 updateCharCount();

@@ -5,7 +5,7 @@ import { startActiveObservation } from "@langfuse/tracing";
 import express from 'express';
 import type { Request, Response } from 'express'
 import path from 'path';
-import { insertFeedback } from './lib/db.js';
+import { insertFeedback, queryFeedback } from './lib/db.js';
 import { fileURLToPath } from 'url';
 import { classifyFeedback } from './lib/agent/agent.js'
 import { v4 as uuid } from 'uuid';
@@ -23,7 +23,15 @@ interface FeedbackBody {
   feedback?: unknown;
 }
 
-app.post('/api/feedback', async (req: Request<object, object, FeedbackBody>, res: Response) => {
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'intext.html'));
+});
+
+app.get('/feedbacks', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'feedback-list.html'));
+});
+
+app.post('/api/feedbacks', async (req: Request<object, object, FeedbackBody>, res: Response) => {
   const feedback = typeof req.body.feedback === 'string' ? req.body.feedback.trim() : '';
 
   if (!feedback) {
@@ -48,7 +56,7 @@ app.post('/api/feedback', async (req: Request<object, object, FeedbackBody>, res
       const label = await classifyFeedback(feedback);
       console.log(`Label [${label}] assigned to feedback [${feedback}] in process [${processId}]`);
 
-      insertFeedback(feedback, label, processId);
+      insertFeedback({content: feedback, label, processId});
 
       span.update({
         output: { processId, result: "Feedback successfully processed", label }
@@ -61,6 +69,25 @@ app.post('/api/feedback', async (req: Request<object, object, FeedbackBody>, res
     } finally {
       span.end();
     }
+  });
+});
+
+app.get("/api/feedbacks/events", (req, res) => {
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+
+  res.write("data: connected\n\n");
+
+  res.write(`event: feedback-list\ndata: ${JSON.stringify(queryFeedback())}\n\n`);
+  
+  const interval = setInterval(() => {
+    res.write(`event: feedback-list\ndata: ${JSON.stringify(queryFeedback())}\n\n`);
+  }, 5000);
+
+  req.on("close", () => {
+    clearInterval(interval);
+    res.end();
   });
 });
 
