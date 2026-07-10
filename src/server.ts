@@ -53,13 +53,13 @@ app.post('/api/feedbacks', async (req: Request<object, object, FeedbackBody>, re
     span.update({ input: { processId, feedback } });
 
     try {
-      const label = await classifyFeedback(feedback);
-      console.log(`Label [${label}] assigned to feedback [${feedback}] in process [${processId}]`);
+      const classification = await classifyFeedback(feedback);
+      console.log(`Classification [${JSON.stringify(classification)}] assigned to feedback [${feedback}] in process [${processId}]`);
 
-      insertFeedback({content: feedback, label, processId});
+      insertFeedback({content: feedback, processId, ...classification});
 
       span.update({
-        output: { processId, result: "Feedback successfully processed", label }
+        output: { processId, result: "Feedback successfully processed", classification }
       });
     } catch (error) {
       console.error(error);

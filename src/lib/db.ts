@@ -20,28 +20,37 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT NOT NULL,
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
-    label TEXT NOT NULL,
-    process_id TEXT NOT NULL
+    sentiment TEXT NOT NULL,
+    process_id TEXT NOT NULL,
+    category TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    weight INTEGER NOT NULL
   )
 `);
 
-const insertStmt = db.prepare('INSERT INTO feedback (content, label, process_id) VALUES (?,?,?)');
-const queryStmt = db.prepare('SELECT process_id, label, content FROM feedback ORDER BY created_at');
+const insertStmt = db.prepare('INSERT INTO feedback (content, sentiment, process_id, category, summary, weight) VALUES (?,?,?,?,?,?)');
+const queryStmt = db.prepare('SELECT process_id, sentiment, content, category, summary, weight FROM feedback ORDER BY created_at');
 
 export type FeedbackItem = {
   processId: string;
   content: string;
-  label: string;
+  sentiment: string;
+  category: string;
+  summary: string;
+  weight: number;
 };
 
 export function insertFeedback(feedback: FeedbackItem): RunResult {
-  return insertStmt.run(feedback.content, feedback.label, feedback.processId);
+  return insertStmt.run(feedback.content, feedback.sentiment, feedback.processId, feedback.category, feedback.summary, feedback.weight);
 }
 
 export function queryFeedback(): FeedbackItem[] {
   return queryStmt.all().map((row: any) => ({
     processId: row.process_id,
     content: row.content,
-    label: row.label,
+    sentiment: row.sentiment,
+    category: row.category,
+    summary: row.summary,
+    weight: row.weight,
   }));
 }

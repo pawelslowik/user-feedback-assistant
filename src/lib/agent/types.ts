@@ -47,3 +47,22 @@ export type ToolCall = {
     };
     indes?: number
 };
+
+export type ToolResult = {
+    name: string;
+    id: string;
+    result: any
+};
+
+export type TooHandler = (toolName: string, toolCallId: string, args: any) => Promise<ToolResult>;
+
+export type CompletionParams = {
+    model: string;
+    messages: Message[];
+    allowedTools: any[];
+    responseJsonSchema: any;
+}
+
+export type AgentParams = CompletionParams & {
+    toolHandler: TooHandler;
+}
