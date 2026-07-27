@@ -1,0 +1,9 @@
+description: "Feedback classification agent evaluation suite"
+
+providers:
+  - id: "file://providers.js"
+
+prompts:
+  - "{{feedback}}"
+
+tests: file://test-cases.json

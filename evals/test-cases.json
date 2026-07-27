@@ -1,0 +1,78 @@
+[
+  {
+    "vars": {
+      "feedback": "This car is a disastrous waste of money: the engine coughs and dies unpredictably, the transmission jerks like it's falling apart, and the promised fuel economy is a laughable lie. Interior materials feel cheap and brittle, the infotainment freezes constantly, and the ride is so harsh it makes every trip stressful. Safety features are unreliable and customer service has been dismissive, so I wouldn’t trust this vehicle for daily use or long drives."
+    },
+    "assert": [
+      {
+        "type": "javascript",
+        "value": "output.category === 'product, services'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.sentiment === 'negative'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.weight === 10"
+      }
+    ]
+  },
+  {
+    "vars": {
+      "feedback": "I love how smooth and responsive this car is—the handling is precise, acceleration feels effortless, and the cabin is quiet and comfortable for long drives. The financing wasn't terrible, but the interest rates and some unclear fees left me a bit frustrated during the purchase process. Overall I'd recommend the car itself, just be sure to review the loan terms carefully."
+    },
+    "assert": [
+      {
+        "type": "javascript",
+        "value": "output.category === 'product, finance'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.sentiment === 'mixed'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.weight >= 6 && output.weight < 9"
+      }
+    ]
+  },
+  {
+    "vars": {
+      "feedback": "I picked the red color because it's the fastest one ;)"
+    },
+    "assert": [
+      {
+        "type": "javascript",
+        "value": "output.category === 'product'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.sentiment === 'positive'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.weight < 2"
+      }
+    ]
+  },
+  {
+    "vars": {
+      "feedback": "I am profoundly grateful to the dealership staff whose exceptional dedication and legal expertise guided me through a complex maze of paperwork, turning what could have been a terrifying purchasing nightmare into a seamless victory"
+    },
+    "assert": [
+      {
+        "type": "javascript",
+        "value": "output.category === 'services'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.sentiment === 'positive'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.weight < 5"
+      }
+    ]
+  }
+]

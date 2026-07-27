@@ -5,7 +5,9 @@
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc && tsc -p tsconfig.client.json",
-    "dev": "npm run build && node --watch dist/server.js"
+    "dev": "npm run build && node --watch dist/server.js",
+    "eval": "promptfoo eval -c evals/promptfoo.yaml",
+    "eval:view": "promptfoo view"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,7 @@
     "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.6",
     "@types/node": "^26.0.1",
+    "promptfoo": "^0.121.19",
     "typescript": "^6.0.3"
   },
   "dependencies": {
