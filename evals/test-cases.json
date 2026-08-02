@@ -6,7 +6,7 @@
     "assert": [
       {
         "type": "javascript",
-        "value": "output.category === 'product, services'"
+        "value": "output.category === 'product,services'"
       },
       {
         "type": "javascript",
@@ -25,7 +25,7 @@
     "assert": [
       {
         "type": "javascript",
-        "value": "output.category === 'product, finance'"
+        "value": "output.category === 'product,finance'"
       },
       {
         "type": "javascript",
@@ -63,7 +63,7 @@
     "assert": [
       {
         "type": "javascript",
-        "value": "output.category === 'services'"
+        "value": "output.category === 'services,legal'"
       },
       {
         "type": "javascript",
@@ -71,7 +71,45 @@
       },
       {
         "type": "javascript",
-        "value": "output.weight < 5"
+        "value": "output.weight <= 7"
+      }
+    ]
+  },
+  {
+    "vars": {
+      "feedback": "I was thrilled by the dealership's impressive variety of flexible financing options that made purchasing my new car surprisingly affordable, even though wading through the dizzying complexity of the legal paperwork gave me a massive headache. Navigating the dense web of automotive laws and contracts was a genuinely frustrating ordeal, but the wide array of payment plans ultimately saved the day."
+    },
+    "assert": [
+      {
+        "type": "javascript",
+        "value": "output.category === 'finance,legal'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.sentiment === 'mixed'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.weight >= 7"
+      }
+    ]
+  },
+  {
+    "vars": {
+      "feedback": "I like apples!"
+    },
+    "assert": [
+      {
+        "type": "javascript",
+        "value": "output.category === 'other'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.sentiment === 'positive'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.weight <= 1"
       }
     ]
   }
