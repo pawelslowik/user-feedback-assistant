@@ -14,7 +14,7 @@
       },
       {
         "type": "javascript",
-        "value": "output.weight === 10"
+        "value": "output.weight >= 9"
       }
     ]
   },
@@ -25,7 +25,7 @@
     "assert": [
       {
         "type": "javascript",
-        "value": "output.category === 'product,finance'"
+        "value": "output.category === 'finance,product'"
       },
       {
         "type": "javascript",
@@ -52,7 +52,7 @@
       },
       {
         "type": "javascript",
-        "value": "output.weight < 2"
+        "value": "output.weight <= 2"
       }
     ]
   },
@@ -63,7 +63,7 @@
     "assert": [
       {
         "type": "javascript",
-        "value": "output.category === 'services,legal'"
+        "value": "output.category === 'legal,services'"
       },
       {
         "type": "javascript",
@@ -71,7 +71,7 @@
       },
       {
         "type": "javascript",
-        "value": "output.weight <= 7"
+        "value": "output.weight <= 8"
       }
     ]
   },

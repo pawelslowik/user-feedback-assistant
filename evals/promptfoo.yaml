@@ -7,3 +7,7 @@ prompts:
   - "{{feedback}}"
 
 tests: file://test-cases.json
+defaultTest:
+  assert:
+    - type: latency
+      threshold: 40000 # milliseconds
