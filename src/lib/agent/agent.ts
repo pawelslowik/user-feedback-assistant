@@ -2,6 +2,7 @@ import type { Message, ToolCall, ToolResult, AgentParams, CompletionParams } fro
 import { completions } from "./openrouter-completions.js";
 import * as z from "zod";
 import type { FeedbackClassification } from "../types.js";
+import { getPrompt } from "./prompts.js";
 
 
 
@@ -95,17 +96,7 @@ async function runAgent(agentParams: AgentParams): Promise<any> {
 }
 
 export async function classifyFeedback(feedback: string): Promise<FeedbackClassification> {
-    const systemPrompt = `
-    <description>
-        You are an analyst responsible for classification of user feedback in a car dealership.
-    </description>
-    <rules>
-        <rule>Summary - brief, one sentence, max 100 characters, only polite language</rule>
-        <rule>Weight - integer 0-10, which indicates how important and meaningful the feedback is. Weight 10 means critical importance, 0 means irrelevant. Assess by feedback content and emotion</rule>
-        <rule>Category - one or many (comma separated, no whitespaces, sorted alphabetically), only values from the list of categories, no other values allowed</rule>
-        <rule>Sentiment - one value from the list of sentiments, no other values allowed</rule>
-    </rules>
-    `;
+    const systemPrompt = await getPrompt();
 
     let messages: Message[] = [
         {

@@ -25,6 +25,7 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
+    "@langfuse/client": "^5.10.0",
     "@langfuse/otel": "^5.9.0",
     "@langfuse/tracing": "^5.9.0",
     "@opentelemetry/auto-instrumentations-node": "^0.77.0",
