@@ -6,7 +6,7 @@
     "assert": [
       {
         "type": "javascript",
-        "value": "output.category === 'product,services'"
+        "value": "output.category === 'product,services-and-support'"
       },
       {
         "type": "javascript",
@@ -63,7 +63,7 @@
     "assert": [
       {
         "type": "javascript",
-        "value": "output.category === 'legal,services'"
+        "value": "output.category === 'legal,services-and-support'"
       },
       {
         "type": "javascript",
@@ -71,7 +71,7 @@
       },
       {
         "type": "javascript",
-        "value": "output.weight <= 8"
+        "value": "output.weight >= 5 && output.weight <= 9"
       }
     ]
   },
@@ -110,6 +110,44 @@
       {
         "type": "javascript",
         "value": "output.weight <= 1"
+      }
+    ]
+  },
+  {
+    "vars": {
+      "feedback": "I waited at the reception desk for over ten minutes while your employees chatted among themselves, completely ignoring me as if I weren't there. It's absolutely unprofessional to prioritize a personal conversation over a customer who just needed a simple answer. Because of this experience, I've decided to buy a different brand of car instead of giving you my business."
+    },
+    "assert": [
+      {
+        "type": "javascript",
+        "value": "output.category === 'services-and-support'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.sentiment === 'negative'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.weight >= 8"
+      }
+    ]
+  },
+  {
+    "vars": {
+      "feedback": "The mechanics in your service department are absolute pros—they diagnosed the issue and had my car fixed in no time. Thanks to their quick, skilled work, I was back on the road before I even finished my coffee!"
+    },
+    "assert": [
+      {
+        "type": "javascript",
+        "value": "output.category === 'services-and-support'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.sentiment === 'positive'"
+      },
+      {
+        "type": "javascript",
+        "value": "output.weight >= 5"
       }
     ]
   }

@@ -7,11 +7,13 @@ import { getPrompt } from "./prompts.js";
 
 
 async function getSentiments(): Promise<string[]> {
-    return Promise.resolve(["positive", "negative", "mixed", "other"]);
+    // fake retrieval from an external source
+    return Promise.resolve(["positive", "negative", "mixed", "neutral", "other"]);
 }
 
 async function getCategories(): Promise<string[]> {
-    return Promise.resolve(["product", "services", "finance", "legal", "other"]);
+    // fake retrieval from an external source
+    return Promise.resolve(["product", "services-and-support", "finance", "legal", "other"]);
 }
 
 const classificationAgentTools = [
