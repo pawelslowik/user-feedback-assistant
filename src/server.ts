@@ -31,6 +31,10 @@ app.get('/feedbacks', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'feedback-list.html'));
 });
 
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.post('/api/feedbacks', async (req: Request<object, object, FeedbackBody>, res: Response) => {
   const feedback = typeof req.body.feedback === 'string' ? req.body.feedback.trim() : '';
 

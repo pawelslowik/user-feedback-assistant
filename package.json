@@ -5,9 +5,10 @@
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc && tsc -p tsconfig.client.json",
-    "dev": "npm run build && node --watch dist/server.js",
+    "dev": "npm run build && node --watch-path=./dist dist/server.js",
     "eval": "promptfoo eval -c evals/promptfoo.yaml",
-    "eval:view": "promptfoo view"
+    "eval:view": "promptfoo view",
+    "simulator": "tsx simulator/simulator.ts"
   },
   "repository": {
     "type": "git",
