@@ -24,12 +24,13 @@ db.exec(`
     process_id TEXT NOT NULL,
     category TEXT NOT NULL,
     summary TEXT NOT NULL,
-    weight INTEGER NOT NULL
+    weight INTEGER NOT NULL,
+    emotion TEXT NOT NULL
   )
 `);
 
-const insertStmt = db.prepare('INSERT INTO feedback (content, sentiment, process_id, category, summary, weight) VALUES (?,?,?,?,?,?)');
-const queryStmt = db.prepare('SELECT process_id, sentiment, content, category, summary, weight FROM feedback ORDER BY created_at');
+const insertStmt = db.prepare('INSERT INTO feedback (content, sentiment, process_id, category, summary, weight, emotion) VALUES (?,?,?,?,?,?,?)');
+const queryStmt = db.prepare('SELECT process_id, sentiment, content, category, summary, weight, emotion FROM feedback ORDER BY created_at');
 
 export type FeedbackItem = {
   processId: string;
@@ -38,10 +39,11 @@ export type FeedbackItem = {
   category: string;
   summary: string;
   weight: number;
+  emotion: string;
 };
 
 export function insertFeedback(feedback: FeedbackItem): RunResult {
-  return insertStmt.run(feedback.content, feedback.sentiment, feedback.processId, feedback.category, feedback.summary, feedback.weight);
+  return insertStmt.run(feedback.content, feedback.sentiment, feedback.processId, feedback.category, feedback.summary, feedback.weight, feedback.emotion);
 }
 
 export function queryFeedback(): FeedbackItem[] {
@@ -52,5 +54,6 @@ export function queryFeedback(): FeedbackItem[] {
     category: row.category,
     summary: row.summary,
     weight: row.weight,
+    emotion: row.emotion
   }));
 }

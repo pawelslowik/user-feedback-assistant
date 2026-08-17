@@ -3,4 +3,5 @@ export type FeedbackClassification = {
     category: string;
     summary: string;
     weight: number;
+    emotion: string
 };

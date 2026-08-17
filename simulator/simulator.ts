@@ -4,6 +4,7 @@ dotenv.config();
 import type { Message, CompletionParams } from "../dist/lib/agent/types.js";
 import { completions } from "../dist/lib/agent/openrouter-completions.js";
 import * as z from "zod";
+import config from "../config.json" with { type: "json" }
 
 const PORT = Number(process.env.SERVER_PORT) || 3000;
 
@@ -61,7 +62,7 @@ async function generateFeedbacks(amount: number): Promise<string[]> {
     });
 
     const completionParams: CompletionParams = {
-        model: 'openai/gpt-5-mini',
+        model: config.model,
         messages: messages,
         allowedTools: [],
         responseJsonSchema: feedbacksSchema.toJSONSchema()

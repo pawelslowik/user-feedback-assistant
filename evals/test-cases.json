@@ -15,6 +15,10 @@
       {
         "type": "javascript",
         "value": "output.weight >= 9"
+      },
+      {
+        "type": "javascript",
+        "value": "output.emotion === 'anger,anxiety,disappointment,frustration,suspicion'"
       }
     ]
   },
@@ -34,6 +38,10 @@
       {
         "type": "javascript",
         "value": "output.weight >= 6 && output.weight < 9"
+      },
+      {
+        "type": "javascript",
+        "value": "output.emotion === 'excitement,frustration,satisfaction'"
       }
     ]
   },
@@ -53,6 +61,10 @@
       {
         "type": "javascript",
         "value": "output.weight <= 2"
+      },
+      {
+        "type": "javascript",
+        "value": "output.emotion === 'excitement'"
       }
     ]
   },
@@ -72,6 +84,10 @@
       {
         "type": "javascript",
         "value": "output.weight >= 5 && output.weight <= 9"
+      },
+      {
+        "type": "javascript",
+        "value": "output.emotion === 'gratitude,relief,satisfaction,trust'"
       }
     ]
   },
@@ -91,6 +107,10 @@
       {
         "type": "javascript",
         "value": "output.weight >= 7"
+      },
+      {
+        "type": "javascript",
+        "value": "output.emotion === 'excitement,frustration,relief,satisfaction'"
       }
     ]
   },
@@ -110,6 +130,10 @@
       {
         "type": "javascript",
         "value": "output.weight <= 1"
+      },
+      {
+        "type": "javascript",
+        "value": "output.emotion === 'satisfaction'"
       }
     ]
   },
@@ -129,6 +153,10 @@
       {
         "type": "javascript",
         "value": "output.weight >= 8"
+      },
+      {
+        "type": "javascript",
+        "value": "output.emotion === 'anger,disappointment,frustration'"
       }
     ]
   },
@@ -148,6 +176,10 @@
       {
         "type": "javascript",
         "value": "output.weight >= 5"
+      },
+      {
+        "type": "javascript",
+        "value": "output.emotion === 'excitement,gratitude,relief,satisfaction,trust'"
       }
     ]
   }

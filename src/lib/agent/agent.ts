@@ -3,17 +3,21 @@ import { completions } from "./openrouter-completions.js";
 import * as z from "zod";
 import type { FeedbackClassification } from "../types.js";
 import { getPrompt } from "./prompts.js";
+import config from "../../../config.json" with { type: "json" }
 
 
 
 async function getSentiments(): Promise<string[]> {
-    // fake retrieval from an external source
     return Promise.resolve(["positive", "negative", "mixed", "neutral", "other"]);
 }
 
 async function getCategories(): Promise<string[]> {
-    // fake retrieval from an external source
     return Promise.resolve(["product", "services-and-support", "finance", "legal", "other"]);
+}
+
+async function getEmotions(): Promise<string[]> {
+    return Promise.resolve(["trust", "frustration", "excitement", "satisfaction", "disappointment", 
+        "suspicion", "gratitude", "anger", "relief", "anxiety"]);
 }
 
 const classificationAgentTools = [
@@ -38,6 +42,17 @@ const classificationAgentTools = [
                 properties: {}
             }
         }
+    },
+    {
+        type: "function",
+        function: {
+            name: "get-emotions",
+            description: "Returns emotions for feedback classification",
+            parameters: {
+                type: "object",
+                properties: {}
+            }
+        }
     }
 ]
 
@@ -49,6 +64,9 @@ async function classificationAgentToolsHandler(toolName: string, toolCallId: str
     }
     if (toolName == "get-categories") {
         awaitedResult = await getCategories();
+    }
+    if (toolName == "get-emotions") {
+        awaitedResult = await getEmotions();
     }
 
     const toolResult: ToolResult = {
@@ -114,11 +132,12 @@ export async function classifyFeedback(feedback: string): Promise<FeedbackClassi
         sentiment: z.string(),
         category: z.string(),
         summary: z.string(),
-        weight: z.number()
+        weight: z.number(),
+        emotion: z.string()
     });
 
     const agentParams: AgentParams = {
-        model: 'openai/gpt-5-mini',
+        model: config.model,
         messages: messages,
         allowedTools: classificationAgentTools,
         toolHandler: classificationAgentToolsHandler,

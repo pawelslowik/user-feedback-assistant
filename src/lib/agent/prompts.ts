@@ -1,15 +1,18 @@
 import { LangfuseClient } from "@langfuse/client";
+import config from "../../../config.json" with { type: "json" }
 
-const promptName = "car-dealership-analyst"
+const promptName = config.promptName;
 const defaultSystemPrompt = `
     <description>
-        You are an analyst responsible for classification of user feedback in a car dealership.
+        ${config.promptDescription}
+        Classify the feedback following the rules.
     </description>
     <rules>
         <rule>Summary - brief, no fluff, one sentence, reported speech, max 60 characters, polite</rule>
         <rule>Weight - integer 0-10, which indicates how important and meaningful the feedback is. Weight 10 means critical importance, 0 means irrelevant. Assess by feedback content and emotion</rule>
         <rule>Category - one or many (comma separated, no whitespaces, sorted alphabetically), only values from the list of categories, no other values allowed</rule>
         <rule>Sentiment - one value from the list of sentiments, no other values allowed</rule>
+        <rule>Emotion - one or many (comma separated, no whitespaces, sorted alphabetically), only values from the list of emotions, no other values allowed</rule>
     </rules>
     `; 
 
