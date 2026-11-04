@@ -1,5 +1,8 @@
 {
     "model": "openai/gpt-5-mini",
+    "embeddingModel": "qwen/qwen3-embedding-8b",
+    "embeddingDimensions": 4096,
+    "embeddingQueryLimit": 5,
     "promptName": "car-dealership-analyst",
     "promptDescription": "You are an analyst responsible for classification of user feedback in a car dealership."
 }
