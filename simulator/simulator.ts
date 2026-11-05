@@ -72,7 +72,7 @@ async function generateFeedbacks(amount: number): Promise<string[]> {
 }
 
 async function simulate() {
-    const feedbacks = await generateFeedbacks(10);
+    const feedbacks = await generateFeedbacks(3);
     console.log(JSON.stringify(feedbacks));
 
     for (var feedback of feedbacks) {

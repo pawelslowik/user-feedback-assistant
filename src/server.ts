@@ -5,10 +5,12 @@ import { startActiveObservation } from "@langfuse/tracing";
 import express from 'express';
 import type { Request, Response } from 'express'
 import path from 'path';
-import { insertFeedback, queryFeedback } from './lib/db.js';
+import { insertFeedback, insertFeedbackEmbedding, queryFeedback } from './lib/db.js';
 import { fileURLToPath } from 'url';
 import { classifyFeedback } from './lib/agent/agent.js'
+import { generateEmbedding } from './lib/agent/embedding.js'
 import { v4 as uuid } from 'uuid';
+import type { UUID } from 'crypto';
 
 const app = express();
 const PORT = Number(process.env.SERVER_PORT) || 3000;
@@ -61,20 +63,34 @@ app.post('/api/feedbacks', async (req: Request<object, object, FeedbackBody>, re
       console.log(`Classification [${JSON.stringify(classification)}] assigned to feedback [${feedback}] in process [${processId}]`);
 
       insertFeedback({content: feedback, processId, ...classification});
-
+      const embedding = await embed(feedback, processId);
+      
       span.update({
-        output: { processId, result: "Feedback successfully processed", classification }
+        output: { processId, result: "Feedback processing completed", classification, embeddingDimension: embedding.length }
       });
+      
     } catch (error) {
       console.error(error);
       span.update({
         output: { processId, result: "Feedback processing failed" }
       });
-    } finally {
-      span.end();
     }
+    span.end();
   });
 });
+
+async function embed(feedback: string, processId: string): Promise<number[]> {
+  try {
+      const embedding = await generateEmbedding(feedback);
+      console.log(`Embedding of length ${embedding.length} generated for feedback [${feedback}] in process [${processId}]`);
+      insertFeedbackEmbedding({embedding, processId});
+      return embedding;
+
+    } catch (error) {
+      console.error(error);
+      return Promise.resolve([]);
+    }
+}
 
 app.get("/api/feedbacks/events", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");

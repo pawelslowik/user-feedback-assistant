@@ -66,3 +66,9 @@ export type CompletionParams = {
 export type AgentParams = CompletionParams & {
     toolHandler: TooHandler;
 }
+
+export type EmbeddingParams = {
+    model: string;
+    input: string;
+    dimensions: number;
+}
