@@ -5,3 +5,5 @@ dist/
 public/app.*
 CLAUDE.md
 AGENTS.md
+public/feedback-list.js*
+public/feedback-list.d.ts*

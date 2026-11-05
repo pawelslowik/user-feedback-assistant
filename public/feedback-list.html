@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback List - User Feedback Assistant</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="container container-wide">
+    <h1>Feedback List</h1>
+    <p class="subtitle">Classified feedback. This list updates automatically.</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Process ID</th>
+            <th scope="col">Sentiment</th>
+            <th scope="col">Category</th>
+            <th scope="col">Summary</th>
+            <th scope="col">Weight</th>
+            <th scope="col">Emotion</th>
+          </tr>
+        </thead>
+        <tbody id="feedback-rows"></tbody>
+      </table>
+    </div>
+    <p id="message" class="message" role="status" aria-live="polite"></p>
+  </main>
+  <script type="module" src="/feedback-list.js"></script>
+</body>
+</html>
