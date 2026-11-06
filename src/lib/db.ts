@@ -95,7 +95,7 @@ export function insertFeedbackEmbedding(feedbackEmbedding: FeedbackEmbedding): R
 export function queryFeedbackEmbedding(feedbackEmbeddingQuery: FeedbackEmbeddingQuery): FeedbackEmbeddingQueryResultItem[] {
   const hardFilters = ["category", "sentiment", "emotion"] as const;
   const activeHardFilters = hardFilters.filter(hardFilter => feedbackEmbeddingQuery[hardFilter]);
-  const conditions = activeHardFilters.map(column => `f.${column} = @${column}`);
+  const conditions = activeHardFilters.map(column => `',' || f.${column} || ',' LIKE '%,' || @${column} || ',%'`);
   const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
 
   const embedQueryStmt = db.prepare(`SELECT f.process_id, f.content, f.summary, vec_distance_cosine(v.embedding, @embedding) AS distance FROM feedback f JOIN feedback_vec v ON f.process_id = v.process_id ${where} ORDER BY distance LIMIT @limit`);

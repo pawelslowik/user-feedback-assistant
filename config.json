@@ -4,5 +4,7 @@
     "embeddingDimensions": 4096,
     "embeddingQueryLimit": 5,
     "promptName": "car-dealership-analyst",
-    "promptDescription": "You are an analyst responsible for classification of user feedback in a car dealership."
+    "promptDescription": "You are an analyst responsible for classification of user feedback in a car dealership.",
+    "researchPromptName": "car-dealership-researcher",
+    "researchPromptDescription": "You are a researcher responsible for answering queries regarding car dealership feedback. In case of questions not related to car dealership feedback politely refuse and explain this is beyond the scope of your responsibilities."
 }

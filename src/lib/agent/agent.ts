@@ -1,23 +1,27 @@
 import type { Message, ToolCall, ToolResult, AgentParams, CompletionParams } from "./types.js";
 import { completions } from "./openrouter-completions.js";
 import * as z from "zod";
-import type { FeedbackClassification } from "../types.js";
-import { getPrompt } from "./prompts.js";
+import type { FeedbackClassification, FeedbackResearchResult } from "../types.js";
+import { getPrompt, getResearchPrompt } from "./prompts.js";
 import config from "../../../config.json" with { type: "json" }
+import { generateEmbedding } from "./embedding.js";
+import { queryFeedbackEmbedding } from "../db.js";
 
-
+const SENTIMENTS: string[] = ["positive", "negative", "mixed", "neutral", "other"];
+const CATEGORIES: string[] = ["product", "services-and-support", "finance", "legal", "other"];
+const EMOTIONS: string[] = ["trust", "frustration", "excitement", "satisfaction", "disappointment", 
+        "suspicion", "gratitude", "anger", "relief", "anxiety"];
 
 async function getSentiments(): Promise<string[]> {
-    return Promise.resolve(["positive", "negative", "mixed", "neutral", "other"]);
+    return Promise.resolve(SENTIMENTS);
 }
 
 async function getCategories(): Promise<string[]> {
-    return Promise.resolve(["product", "services-and-support", "finance", "legal", "other"]);
+    return Promise.resolve(CATEGORIES);
 }
 
 async function getEmotions(): Promise<string[]> {
-    return Promise.resolve(["trust", "frustration", "excitement", "satisfaction", "disappointment", 
-        "suspicion", "gratitude", "anger", "relief", "anxiety"]);
+    return Promise.resolve(EMOTIONS);
 }
 
 const classificationAgentTools = [
@@ -56,6 +60,27 @@ const classificationAgentTools = [
     }
 ]
 
+const researchAgentTools = [
+    {
+        type: "function",
+        function: {
+            name: "semantic-search-feedback",
+            description: "Semantic search over stored customer feedback. Write `query` as text a customer might have written, not as a question. You may call this tool several times.",
+            parameters: {
+                type: "object",
+                properties: {
+                    query: { type: "string", description: "Customer-style text to match semantically" },
+                    sentiment: { type: "string", enum: SENTIMENTS },
+                    category: { type: "string", enum: CATEGORIES },
+                    emotion: { type: "string", enum: EMOTIONS }
+                },
+                required: ["query"],
+                additionalProperties: false
+            }
+        }
+    }
+]
+
 async function classificationAgentToolsHandler(toolName: string, toolCallId: string, args: any): Promise<ToolResult> {
     let awaitedResult = null;
 
@@ -67,6 +92,30 @@ async function classificationAgentToolsHandler(toolName: string, toolCallId: str
     }
     if (toolName == "get-emotions") {
         awaitedResult = await getEmotions();
+    }
+
+    const toolResult: ToolResult = {
+        name: toolName,
+        id: toolCallId,
+        result: awaitedResult
+    };
+    return Promise.resolve(toolResult);
+}
+
+async function researchAgentToolsHandler(toolName: string, toolCallId: string, args: any): Promise<ToolResult> {
+    let awaitedResult = null;
+
+    if (toolName == "semantic-search-feedback") {
+        try {
+            const embedding = await generateEmbedding(args.query);
+            //TODO: decouple agent from DB
+            awaitedResult = queryFeedbackEmbedding({ embedding, sentiment: args.sentiment, category: args.category, emotion: args.emotion });
+        }
+        catch (error) {
+            console.error(error);
+            awaitedResult = "Semantic search failed";
+        }
+        
     }
 
     const toolResult: ToolResult = {
@@ -146,4 +195,35 @@ export async function classifyFeedback(feedback: string): Promise<FeedbackClassi
 
     const agentResponse = await runAgent(agentParams);
     return JSON.parse(agentResponse) as FeedbackClassification;
+}
+
+export async function researchFeedback(query: string): Promise<FeedbackResearchResult> {
+    const systemPrompt = await getResearchPrompt();
+
+    let messages: Message[] = [
+        {
+            role: 'system', content: systemPrompt
+        },
+        {
+            role: 'user',
+            content: query,
+        },
+    ];
+
+    const feedbackResearchSchema = z.object({
+        content: z.string(),
+        confidence: z.number(),
+        sourceSummaries: z.array(z.string())
+    });
+
+    const agentParams: AgentParams = {
+        model: config.model,
+        messages: messages,
+        allowedTools: researchAgentTools,
+        toolHandler: researchAgentToolsHandler,
+        responseJsonSchema: feedbackResearchSchema.toJSONSchema()
+    };
+
+    const agentResponse = await runAgent(agentParams);
+    return JSON.parse(agentResponse) as FeedbackResearchResult;
 }
