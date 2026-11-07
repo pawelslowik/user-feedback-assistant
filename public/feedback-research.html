@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Research - User Feedback Assistant</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Research Feedback</h1>
+    <p class="subtitle">Ask a question about customer feedback. The answer is based only on stored feedback.</p>
+
+    <form id="research-form" novalidate>
+      <label for="query">Query</label>
+      <textarea
+        id="query"
+        name="query"
+        rows="4"
+        maxlength="1000"
+        placeholder="For example: Why are customers unhappy with financing?"
+        required
+      ></textarea>
+      <div class="meta">
+        <span id="char-count">0 / 1000</span>
+      </div>
+      <button type="submit" id="submit-btn">Run research</button>
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+    </form>
+
+    <section id="research-result" class="research-result" aria-live="polite" hidden>
+      <h2>Answer</h2>
+      <p id="answer-content" class="answer-content"></p>
+      <p id="answer-confidence" class="answer-confidence"></p>
+      <h3>Sources</h3>
+      <ul id="answer-sources" class="answer-sources"></ul>
+    </section>
+  </main>
+  <script type="module" src="/feedback-research.js"></script>
+</body>
+</html>

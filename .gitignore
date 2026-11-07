@@ -7,3 +7,5 @@ CLAUDE.md
 AGENTS.md
 public/feedback-list.js*
 public/feedback-list.d.ts*
+public/feedback-research.js*
+public/feedback-research.d.ts*

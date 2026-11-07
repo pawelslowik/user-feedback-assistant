@@ -7,10 +7,9 @@ import type { Request, Response } from 'express'
 import path from 'path';
 import { insertFeedback, insertFeedbackEmbedding, queryFeedback } from './lib/db.js';
 import { fileURLToPath } from 'url';
-import { classifyFeedback } from './lib/agent/agent.js'
+import { classifyFeedback, researchFeedback } from './lib/agent/agent.js'
 import { generateEmbedding } from './lib/agent/embedding.js'
 import { v4 as uuid } from 'uuid';
-import type { UUID } from 'crypto';
 
 const app = express();
 const PORT = Number(process.env.SERVER_PORT) || 3000;
@@ -25,12 +24,20 @@ interface FeedbackBody {
   feedback?: unknown;
 }
 
+interface FeedbackResearchBody {
+  query?: unknown;
+}
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 app.get('/feedbacks', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'feedback-list.html'));
+});
+
+app.get('/feedbacks/researches', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'feedback-research.html'));
 });
 
 app.get('/api/health', (req, res) => {
@@ -74,6 +81,45 @@ app.post('/api/feedbacks', async (req: Request<object, object, FeedbackBody>, re
       span.update({
         output: { processId, result: "Feedback processing failed" }
       });
+    }
+    span.end();
+  });
+});
+
+app.post('/api/feedbacks/researches', async (req: Request<object, object, FeedbackResearchBody>, res: Response) => {
+  const query = typeof req.body.query === 'string' ? req.body.query.trim() : '';
+
+  if (!query) {
+    return res.status(400).json({ error: 'Research query is required.' });
+  }
+
+  if (query.length > MAX_LENGTH) {
+    return res.status(400).json({ error: `Research query must be at most ${MAX_LENGTH} characters.` });
+  }
+
+  console.log(`Researching feedback using query: [${query}]`);
+
+  await startActiveObservation("feedback-research", async (span) => {
+    span.update({ input: { query } });
+
+    try {
+      const researchResult = await researchFeedback(query);
+      console.log(`Feedback research result [${JSON.stringify(researchResult)}]`);
+
+      span.update({
+        output: { result: "Feedback research completed", researchResult }
+      });
+
+
+      res.status(200).json({ success: true, ...researchResult });
+      
+    } catch (error) {
+      console.error(error);
+      span.update({
+        output: { result: "Feedback research failed" }
+      });
+      
+      res.status(500).json({ error: "Feedback research failed"});
     }
     span.end();
   });

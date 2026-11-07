@@ -146,3 +146,42 @@ tbody tr:last-child td {
 .nowrap {
   white-space: nowrap;
 }
+
+.research-result {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.research-result h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.research-result h3 {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.answer-content {
+  margin: 0;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.answer-confidence {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.answer-sources {
+  margin: 0;
+  padding-left: 1.25rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+.answer-sources li + li {
+  margin-top: 0.25rem;
+}
