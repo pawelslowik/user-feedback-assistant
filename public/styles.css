@@ -185,3 +185,8 @@ tbody tr:last-child td {
 .answer-sources li + li {
   margin-top: 0.25rem;
 }
+
+.content-cell {
+  min-width: 20rem;
+  white-space: pre-wrap;
+}

@@ -1,4 +1,4 @@
-const COLUMN_COUNT = 7;
+const COLUMN_COUNT = 8;
 
 const feedbackRows = document.getElementById('feedback-rows') as HTMLTableSectionElement;
 const message = document.getElementById('message') as HTMLParagraphElement;
@@ -11,6 +11,7 @@ interface FeedbackListItem {
   weight: number;
   emotion: string;
   createdAt: string;
+  content: string;
 }
 
 function createCell(text: string): HTMLTableCellElement {
@@ -40,6 +41,8 @@ function createFeedbackRow(feedback: FeedbackListItem): HTMLTableRowElement {
   const row = document.createElement('tr');
   const processIdCell = createCell(feedback.processId);
   processIdCell.className = 'nowrap';
+  const contentCell = createCell(feedback.content);
+  contentCell.className = 'content-cell';
 
   row.append(
     createCreatedAtCell(feedback.createdAt),
@@ -49,6 +52,7 @@ function createFeedbackRow(feedback: FeedbackListItem): HTMLTableRowElement {
     createCell(feedback.summary),
     createCell(String(feedback.weight)),
     createCell(feedback.emotion),
+    contentCell,
   );
   return row;
 }

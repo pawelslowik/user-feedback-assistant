@@ -53,7 +53,7 @@ export type FeedbackItem = {
   emotion: string;
 };
 
-export type FeedbackQueryResult = FeedbackItem & {
+export type FeedbackQueryResultItem = FeedbackItem & {
   createdAt: string;
 };
 
@@ -80,7 +80,7 @@ export function insertFeedback(feedback: FeedbackItem): RunResult {
   return insertStmt.run(feedback.content, feedback.sentiment, feedback.processId, feedback.category, feedback.summary, feedback.weight, feedback.emotion);
 }
 
-export function queryFeedback(): FeedbackQueryResult[] {
+export function queryFeedback(): FeedbackQueryResultItem[] {
   return queryStmt.all().map((row: any) => ({
     processId: row.process_id,
     content: row.content,
