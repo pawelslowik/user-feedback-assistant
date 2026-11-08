@@ -32,6 +32,8 @@ export async function completions(completionParams: CompletionParams) {
         parallel_tool_calls: true,
         stream: false
     };
+
+    const start = performance.now();
     const response = await fetch(OPENROUTER_COMPLETIONS_API, {
         method: 'POST',
         headers: {
@@ -42,7 +44,7 @@ export async function completions(completionParams: CompletionParams) {
     });
 
     const json = await response.json();
-
+    console.log(`openrouter-completions took ${Math.round(performance.now() - start)} ms`);
     generation.update({ output: json}).end();
     return json;
 }

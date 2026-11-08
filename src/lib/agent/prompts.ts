@@ -48,7 +48,6 @@ await langfuse.prompt.get(promptName)
 export async function getPrompt(): Promise<string> {
     const prompt = await langfuse.prompt.get(promptName, { fallback: defaultSystemPrompt, cacheTtlSeconds: 0 });
     const compiled = prompt.compile();
-    console.log(`Compiled prompt: ${compiled}`);
     return compiled;
 }
 

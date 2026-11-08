@@ -25,6 +25,7 @@ export async function embeddings(embeddingParams: EmbeddingParams): Promise<numb
     };
 
     try {
+        const start = performance.now();
         const response = await fetch(OPENROUTER_EMBEDDINGS_API, {
             method: 'POST',
             headers: {
@@ -35,12 +36,12 @@ export async function embeddings(embeddingParams: EmbeddingParams): Promise<numb
         });
 
         const json = await response.json();
+        console.log(`openrouter-embeddings took ${Math.round(performance.now() - start)} ms`);
         if (!response.ok || !json.data?.[0]?.embedding) {
             throw new Error(`Embedding request failed (${response.status}): ${JSON.stringify(json.error ?? json)}`);
         }
 
         const embedding = json.data[0].embedding;
-        console.log(`Embedding dimension: ${embedding.length}`);
         generation.update({ output: { dimensions: embedding.length, usage: json.usage } });
         return embedding;
     }

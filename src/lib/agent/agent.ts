@@ -139,7 +139,7 @@ async function runAgent(agentParams: AgentParams): Promise<any> {
         for (const toolCall of toolCalls) {
             const toolName = toolCall.function.name;
             const args = JSON.parse(toolCall.function.arguments);
-            console.log("tool:" + toolName);
+            console.log("Running tool:" + toolName);
             tasks.push(agentParams.toolHandler(toolName, toolCall.id, args));
         }
         const parallelToolResults = await Promise.all(tasks);
@@ -147,7 +147,7 @@ async function runAgent(agentParams: AgentParams): Promise<any> {
         for (const toolResult of parallelToolResults) {
             const stringResult = JSON.stringify(toolResult.result);
             toolCallCounter++;
-            console.log("tool " + toolResult.name + " result:" + stringResult);
+            console.log("Tool " + toolResult.name + " result:" + stringResult);
             agentParams.messages.push({
                 role: 'tool',
                 tool_call_id: toolResult.id,
