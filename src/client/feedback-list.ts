@@ -1,4 +1,4 @@
-const COLUMN_COUNT = 6;
+const COLUMN_COUNT = 7;
 
 const feedbackRows = document.getElementById('feedback-rows') as HTMLTableSectionElement;
 const message = document.getElementById('message') as HTMLParagraphElement;
@@ -10,11 +10,29 @@ interface FeedbackListItem {
   summary: string;
   weight: number;
   emotion: string;
+  createdAt: string;
 }
 
 function createCell(text: string): HTMLTableCellElement {
   const cell = document.createElement('td');
   cell.textContent = text;
+  return cell;
+}
+
+function createCreatedAtCell(createdAt: string): HTMLTableCellElement {
+  const cell = document.createElement('td');
+  cell.className = 'nowrap';
+
+  const time = document.createElement('time');
+  time.dateTime = createdAt;
+  time.title = createdAt;
+
+  const date = new Date(createdAt);
+  time.textContent = isNaN(date.getTime())
+    ? createdAt
+    : date.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'medium' });
+
+  cell.append(time);
   return cell;
 }
 
@@ -24,6 +42,7 @@ function createFeedbackRow(feedback: FeedbackListItem): HTMLTableRowElement {
   processIdCell.className = 'nowrap';
 
   row.append(
+    createCreatedAtCell(feedback.createdAt),
     processIdCell,
     createCell(feedback.sentiment),
     createCell(feedback.category),

@@ -22,7 +22,7 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS feedback (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT NOT NULL,
-    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
     sentiment TEXT NOT NULL,
     process_id TEXT NOT NULL UNIQUE,
     category TEXT NOT NULL,
@@ -40,7 +40,7 @@ db.exec(`
 `);
 
 const insertStmt = db.prepare('INSERT INTO feedback (content, sentiment, process_id, category, summary, weight, emotion) VALUES (?,?,?,?,?,?,?)');
-const queryStmt = db.prepare('SELECT process_id, sentiment, content, category, summary, weight, emotion FROM feedback ORDER BY created_at');
+const queryStmt = db.prepare('SELECT process_id, sentiment, content, category, summary, weight, emotion, created_at FROM feedback ORDER BY created_at DESC');
 const embedStmt = db.prepare('INSERT INTO feedback_vec (process_id, embedding) VALUES (?,?)');
 
 export type FeedbackItem = {
@@ -51,6 +51,10 @@ export type FeedbackItem = {
   summary: string;
   weight: number;
   emotion: string;
+};
+
+export type FeedbackQueryResult = FeedbackItem & {
+  createdAt: string;
 };
 
 export type FeedbackEmbedding = {
@@ -76,7 +80,7 @@ export function insertFeedback(feedback: FeedbackItem): RunResult {
   return insertStmt.run(feedback.content, feedback.sentiment, feedback.processId, feedback.category, feedback.summary, feedback.weight, feedback.emotion);
 }
 
-export function queryFeedback(): FeedbackItem[] {
+export function queryFeedback(): FeedbackQueryResult[] {
   return queryStmt.all().map((row: any) => ({
     processId: row.process_id,
     content: row.content,
@@ -84,7 +88,8 @@ export function queryFeedback(): FeedbackItem[] {
     category: row.category,
     summary: row.summary,
     weight: row.weight,
-    emotion: row.emotion
+    emotion: row.emotion,
+    createdAt: row.created_at
   }));
 }
 
