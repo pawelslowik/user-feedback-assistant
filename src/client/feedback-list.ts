@@ -1,4 +1,4 @@
-const COLUMN_COUNT = 8;
+const COLUMN_COUNT = 9;
 
 const feedbackRows = document.getElementById('feedback-rows') as HTMLTableSectionElement;
 const message = document.getElementById('message') as HTMLParagraphElement;
@@ -7,6 +7,7 @@ interface FeedbackListItem {
   processId: string;
   sentiment: string;
   category: string;
+  subcategory: string;
   summary: string;
   weight: number;
   emotion: string;
@@ -49,6 +50,7 @@ function createFeedbackRow(feedback: FeedbackListItem): HTMLTableRowElement {
     processIdCell,
     createCell(feedback.sentiment),
     createCell(feedback.category),
+    createCell(feedback.subcategory),
     createCell(feedback.summary),
     createCell(String(feedback.weight)),
     createCell(feedback.emotion),

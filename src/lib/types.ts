@@ -4,7 +4,8 @@ export type FeedbackClassification = {
     category: string;
     summary: string;
     weight: number;
-    emotion: string
+    emotion: string;
+    subcategory: string;
 };
 
 export type FeedbackResearchResult = {
@@ -12,3 +13,8 @@ export type FeedbackResearchResult = {
     confidence: number;
     sourceSummaries: string[];
 };
+
+export type Subcategory = {
+    name: string;
+    description: string;
+}

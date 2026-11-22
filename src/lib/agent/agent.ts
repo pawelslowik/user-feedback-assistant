@@ -1,60 +1,42 @@
 import type { Message, ToolCall, ToolResult, AgentParams, CompletionParams } from "./types.js";
 import { completions } from "./openrouter-completions.js";
 import * as z from "zod";
-import type { FeedbackClassification, FeedbackResearchResult } from "../types.js";
+import type { FeedbackClassification, FeedbackResearchResult, Subcategory } from "../types.js";
 import { getPrompt, getResearchPrompt } from "./prompts.js";
 import config from "../../../config.json" with { type: "json" }
 import { generateEmbedding } from "./embedding.js";
 import { queryFeedbackEmbedding } from "../db.js";
 
-const SENTIMENTS: string[] = ["positive", "negative", "mixed", "neutral", "other"];
-const CATEGORIES: string[] = ["product", "services-and-support", "finance", "legal", "other"];
-const EMOTIONS: string[] = ["trust", "frustration", "excitement", "satisfaction", "disappointment", 
-        "suspicion", "gratitude", "anger", "relief", "anxiety"];
+const SENTIMENTS: string[] = config.classification.sentiments.map(s => s.name);
+const CATEGORIES: string[] = config.classification.categories.map(c => c.name);
+const EMOTIONS: string[] = config.classification.emotions.map(e => e.name);
 
-async function getSentiments(): Promise<string[]> {
-    return Promise.resolve(SENTIMENTS);
-}
-
-async function getCategories(): Promise<string[]> {
-    return Promise.resolve(CATEGORIES);
-}
-
-async function getEmotions(): Promise<string[]> {
-    return Promise.resolve(EMOTIONS);
+async function getSubcategories(categories: string[]): Promise<Subcategory[]> {
+    const subcategories: Subcategory[] = config.classification.categories
+        .filter(cat => categories.includes(cat.name))
+        .flatMap(cat => cat.subcategories);
+    return Promise.resolve(subcategories);
 }
 
 const classificationAgentTools = [
     {
         type: "function",
         function: {
-            name: "get-sentiments",
-            description: "Returns sentiments for feedback classification",
+            name: "get-subcategories",
+            description: "Returns a list of subcategories for the provided categories",
             parameters: {
                 type: "object",
-                properties: {}
-            }
-        }
-    },
-    {
-        type: "function",
-        function: {
-            name: "get-categories",
-            description: "Returns categories for feedback classification",
-            parameters: {
-                type: "object",
-                properties: {}
-            }
-        }
-    },
-    {
-        type: "function",
-        function: {
-            name: "get-emotions",
-            description: "Returns emotions for feedback classification",
-            parameters: {
-                type: "object",
-                properties: {}
+                 properties: {
+                    categories: {
+                        type: "array",
+                        description: "Top-level categories to get subcategories for",
+                        items: { type: "string", enum: CATEGORIES },
+                        minItems: 1,
+                        uniqueItems: true
+                    }
+                },
+                required: ["categories"],
+                additionalProperties: false
             }
         }
     }
@@ -84,14 +66,8 @@ const researchAgentTools = [
 async function classificationAgentToolsHandler(toolName: string, toolCallId: string, args: any): Promise<ToolResult> {
     let awaitedResult = null;
 
-    if (toolName == "get-sentiments") {
-        awaitedResult = await getSentiments();
-    }
-    if (toolName == "get-categories") {
-        awaitedResult = await getCategories();
-    }
-    if (toolName == "get-emotions") {
-        awaitedResult = await getEmotions();
+    if (toolName == "get-subcategories") {
+        awaitedResult = await getSubcategories(args.categories ?? []);
     }
 
     const toolResult: ToolResult = {
@@ -182,6 +158,7 @@ export async function classifyFeedback(feedback: string): Promise<FeedbackClassi
         valid: z.boolean(),
         sentiment: z.string(),
         category: z.string(),
+        subcategory: z.string(),
         summary: z.string(),
         weight: z.number(),
         emotion: z.string()

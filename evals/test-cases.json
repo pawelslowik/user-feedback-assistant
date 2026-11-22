@@ -14,6 +14,10 @@
       },
       {
         "type": "javascript",
+        "value": "['performance-and-driving', 'safety-concern', 'technology-and-features', 'vehicle-quality'].every(s => output.subcategory.split(',').includes(s))"
+      },
+      {
+        "type": "javascript",
         "value": "output.sentiment === 'negative'"
       },
       {
@@ -42,6 +46,10 @@
       {
         "type": "javascript",
         "value": "output.category === 'finance,product'"
+      },
+      {
+        "type": "javascript",
+        "value": "['financing-and-leasing', 'performance-and-driving', 'pricing-and-fees'].every(s => output.subcategory.split(',').includes(s))"
       },
       {
         "type": "javascript",
@@ -76,6 +84,10 @@
       },
       {
         "type": "javascript",
+        "value": "output.subcategory.split(',').every(s => ['performance-and-driving', 'selection-and-availability'].includes(s))"
+      },
+      {
+        "type": "javascript",
         "value": "output.sentiment === 'positive'"
       },
       {
@@ -104,6 +116,10 @@
       {
         "type": "javascript",
         "value": "output.category === 'legal,services-and-support'"
+      },
+      {
+        "type": "javascript",
+        "value": "['registration-and-documents'].every(s => output.subcategory.split(',').includes(s))"
       },
       {
         "type": "javascript",
@@ -138,6 +154,10 @@
       },
       {
         "type": "javascript",
+        "value": "['financing-and-leasing'].every(s => output.subcategory.split(',').includes(s))"
+      },
+      {
+        "type": "javascript",
         "value": "output.sentiment === 'mixed'"
       },
       {
@@ -169,6 +189,10 @@
       },
       {
         "type": "javascript",
+        "value": "output.subcategory === ''"
+      },
+      {
+        "type": "javascript",
         "value": "output.sentiment === ''"
       },
       {
@@ -196,6 +220,10 @@
       },
       {
         "type": "javascript",
+        "value": "output.subcategory.split(',').every(s => ['sales-experience', 'scheduling-and-communication'].includes(s))"
+      },
+      {
+        "type": "javascript",
         "value": "output.sentiment === 'negative'"
       },
       {
@@ -204,7 +232,7 @@
       },
       {
         "type": "javascript",
-        "value": "['anger', 'disappointment', 'frustration'].every(e => output.emotion.split(',').includes(e))"
+        "value": "['disappointment', 'frustration'].every(e => output.emotion.split(',').includes(e))"
       },
       {
         "type": "javascript",
@@ -224,6 +252,10 @@
       {
         "type": "javascript",
         "value": "output.category === 'services-and-support'"
+      },
+      {
+        "type": "javascript",
+        "value": "['maintenance-and-repair'].every(s => output.subcategory.split(',').includes(s))"
       },
       {
         "type": "javascript",
@@ -259,6 +291,10 @@
       {
         "type": "javascript",
         "value": "output.category === ''"
+      },
+      {
+        "type": "javascript",
+        "value": "output.subcategory === ''"
       },
       {
         "type": "javascript",

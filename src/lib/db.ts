@@ -26,6 +26,7 @@ db.exec(`
     sentiment TEXT NOT NULL,
     process_id TEXT NOT NULL UNIQUE,
     category TEXT NOT NULL,
+    subcategory TEXT NOT NULL,
     summary TEXT NOT NULL,
     weight INTEGER NOT NULL,
     emotion TEXT NOT NULL
@@ -39,8 +40,8 @@ db.exec(`
   )
 `);
 
-const insertStmt = db.prepare('INSERT INTO feedback (content, sentiment, process_id, category, summary, weight, emotion) VALUES (?,?,?,?,?,?,?)');
-const queryStmt = db.prepare('SELECT process_id, sentiment, content, category, summary, weight, emotion, created_at FROM feedback ORDER BY created_at DESC');
+const insertStmt = db.prepare('INSERT INTO feedback (content, sentiment, process_id, category, subcategory, summary, weight, emotion) VALUES (?,?,?,?,?,?,?,?)');
+const queryStmt = db.prepare('SELECT process_id, sentiment, content, category, subcategory, summary, weight, emotion, created_at FROM feedback ORDER BY created_at DESC');
 const embedStmt = db.prepare('INSERT INTO feedback_vec (process_id, embedding) VALUES (?,?)');
 
 export type FeedbackItem = {
@@ -48,6 +49,7 @@ export type FeedbackItem = {
   content: string;
   sentiment: string;
   category: string;
+  subcategory: string;
   summary: string;
   weight: number;
   emotion: string;
@@ -77,7 +79,7 @@ export type FeedbackEmbeddingQuery = {
 };
 
 export function insertFeedback(feedback: FeedbackItem): RunResult {
-  return insertStmt.run(feedback.content, feedback.sentiment, feedback.processId, feedback.category, feedback.summary, feedback.weight, feedback.emotion);
+  return insertStmt.run(feedback.content, feedback.sentiment, feedback.processId, feedback.category, feedback.subcategory, feedback.summary, feedback.weight, feedback.emotion);
 }
 
 export function queryFeedback(): FeedbackQueryResultItem[] {
@@ -86,6 +88,7 @@ export function queryFeedback(): FeedbackQueryResultItem[] {
     content: row.content,
     sentiment: row.sentiment,
     category: row.category,
+    subcategory: row.subcategory,
     summary: row.summary,
     weight: row.weight,
     emotion: row.emotion,

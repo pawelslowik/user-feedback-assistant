@@ -2,7 +2,78 @@
     "classification": {
         "model": "openai/gpt-5-mini",
         "promptName": "car-dealership-analyst",
-        "promptDescription": "You are an analyst responsible for classification of user feedback in a car dealership."
+        "promptDescription": "You are an analyst responsible for classification of user feedback in a car dealership.",
+        "sentiments": [
+            { "name": "positive" },
+            { "name": "negative" },
+            { "name": "mixed" },
+            { "name": "neutral" },
+            { "name": "other" }
+        ],
+        "categories": [
+            {
+                "name": "product",
+                "subcategories": [
+                    { "name": "vehicle-quality", "description": "Defects, build quality, rattles, paint, things broken on delivery" },
+                    { "name": "performance-and-driving", "description": "Engine, handling, fuel/EV range, comfort, noise" },
+                    { "name": "technology-and-features", "description": "Infotainment, apps, driver assistance, connectivity, software bugs" },
+                    { "name": "safety-concern", "description": "Brakes, airbags, steering, recalls, anything that risks injury" },
+                    { "name": "selection-and-availability", "description": "Stock, choice of models/trims/colours, waiting times for orders" }
+                ]
+            },
+            {
+                "name": "services-and-support",
+                "subcategories": [
+                    { "name": "sales-experience", "description": "Salesperson behaviour, pressure, honesty, test drives, showroom visit" },
+                    { "name": "delivery-and-handover", "description": "Delivery date, vehicle prep, explanation of features at pickup" },
+                    { "name": "maintenance-and-repair", "description": "Workshop quality, repeat repairs, turnaround time, loaner cars" },
+                    { "name": "scheduling-and-communication", "description": "Booking, callbacks, status updates, reachability by phone/email" },
+                    { "name": "parts-and-accessories", "description": "Parts availability, delays, pricing, fitting of accessories" }
+                ]
+            },
+            {
+                "name": "finance",
+                "subcategories": [
+                    { "name": "pricing-and-fees", "description": "Vehicle price, hidden or unexpected fees, quote vs. final price" },
+                    { "name": "financing-and-leasing", "description": "Loan/lease terms, interest rates, approvals, contract changes" },
+                    { "name": "trade-in", "description": "Valuation of the customer's old car, trade-in process" },
+                    { "name": "billing-and-payments", "description": "Invoices, refunds, deposits, payment errors, double charges" },
+                    { "name": "insurance-and-extended-warranty", "description": "Add-on products, upselling, cancellation of add-ons" }
+                ]
+            },
+            {
+                "name": "legal",
+                "subcategories": [
+                    { "name": "warranty-claims", "description": "Denied or disputed warranty coverage" },
+                    { "name": "contract-dispute", "description": "Breach of contract, cancelled orders, terms not honoured" },
+                    { "name": "registration-and-documents", "description": "Plates, title, registration papers, missing paperwork" },
+                    { "name": "misrepresentation", "description": "Misleading ads, undisclosed damage or history, mileage discrepancies" },
+                    { "name": "privacy-and-data", "description": "Personal data misuse, spam marketing, data deletion requests" }
+                ]
+            },
+            {
+                "name": "other",
+                "subcategories": [
+                    { "name": "facilities", "description": "Showroom, waiting area, parking, cleanliness, accessibility" },
+                    { "name": "website-and-online", "description": "Website, online configurator, online booking, review platforms" },
+                    { "name": "general-praise", "description": "Generic positive feedback with no specific topic" },
+                    { "name": "suggestion", "description": "Ideas for improvement not tied to a complaint" },
+                    { "name": "promotions-and-events", "description": "Ads, newsletters, discounts, open days, loyalty programmes" }
+                ]
+            }
+        ],
+        "emotions": [
+            { "name": "trust" },
+            { "name": "frustration" },
+            { "name": "excitement" },
+            { "name": "satisfaction" },
+            { "name": "disappointment" },
+            { "name": "suspicion" },
+            { "name": "gratitude" },
+            { "name": "anger" },
+            { "name": "relief" },
+            { "name": "anxiety" }
+        ]
     },
     "research": {
         "model": "openai/gpt-5-mini",
