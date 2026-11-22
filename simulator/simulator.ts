@@ -62,7 +62,7 @@ async function generateFeedbacks(amount: number): Promise<string[]> {
     });
 
     const completionParams: CompletionParams = {
-        model: config.model,
+        model: config.classification.model,
         messages: messages,
         allowedTools: [],
         responseJsonSchema: feedbacksSchema.toJSONSchema()

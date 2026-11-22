@@ -5,9 +5,9 @@ import type { EmbeddingParams } from "./types.js";
 
 export async function generateEmbedding(input: string) {
     const embeddingParams: EmbeddingParams = { 
-        model: config.embeddingModel,
+        model: config.research.embedding.model,
         input: input,
-        dimensions: config.embeddingDimensions
+        dimensions: config.research.embedding.dimensions
     };
     return embeddings(embeddingParams);
 }

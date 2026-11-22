@@ -188,7 +188,7 @@ export async function classifyFeedback(feedback: string): Promise<FeedbackClassi
     });
 
     const agentParams: AgentParams = {
-        model: config.model,
+        model: config.classification.model,
         messages: messages,
         allowedTools: classificationAgentTools,
         toolHandler: classificationAgentToolsHandler,
@@ -219,7 +219,7 @@ export async function researchFeedback(query: string): Promise<FeedbackResearchR
     });
 
     const agentParams: AgentParams = {
-        model: config.model,
+        model: config.research.model,
         messages: messages,
         allowedTools: researchAgentTools,
         toolHandler: researchAgentToolsHandler,

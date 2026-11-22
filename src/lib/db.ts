@@ -35,7 +35,7 @@ db.exec(`
 db.exec(`
   CREATE VIRTUAL TABLE IF NOT EXISTS feedback_vec USING vec0(
     process_id TEXT PRIMARY KEY,
-    embedding float[${config.embeddingDimensions}] distance_metric=cosine
+    embedding float[${config.research.embedding.dimensions}] distance_metric=cosine
   )
 `);
 
@@ -104,7 +104,7 @@ export function queryFeedbackEmbedding(feedbackEmbeddingQuery: FeedbackEmbedding
   const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
 
   const embedQueryStmt = db.prepare(`SELECT f.process_id, f.content, f.summary, vec_distance_cosine(v.embedding, @embedding) AS distance FROM feedback f JOIN feedback_vec v ON f.process_id = v.process_id ${where} ORDER BY distance LIMIT @limit`);
-  const params: Record<string, unknown> = { embedding: new Float32Array(feedbackEmbeddingQuery.embedding), limit: config.embeddingQueryLimit };
+  const params: Record<string, unknown> = { embedding: new Float32Array(feedbackEmbeddingQuery.embedding), limit: config.research.embedding.queryLimit };
   for (const filter of activeHardFilters) {
     params[filter] = feedbackEmbeddingQuery[filter];
   }

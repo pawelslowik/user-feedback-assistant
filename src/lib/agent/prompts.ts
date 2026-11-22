@@ -1,10 +1,10 @@
 import { LangfuseClient } from "@langfuse/client";
 import config from "../../../config.json" with { type: "json" }
 
-const promptName = config.promptName;
+const promptName = config.classification.promptName;
 const defaultSystemPrompt = `
     <description>
-        ${config.promptDescription}
+        ${config.classification.promptDescription}
         Classify the feedback following the rules.
     </description>
     <rules>
@@ -20,7 +20,7 @@ const defaultSystemPrompt = `
 
 const defaultResearcherSystemPrompt = `
     <description>
-        ${config.researchPromptDescription}
+        ${config.research.promptDescription}
         Research and answer the query following the rules.
     </description>
     <rules>

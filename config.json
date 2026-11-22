@@ -1,10 +1,17 @@
 {
-    "model": "openai/gpt-5-mini",
-    "embeddingModel": "qwen/qwen3-embedding-8b",
-    "embeddingDimensions": 4096,
-    "embeddingQueryLimit": 5,
-    "promptName": "car-dealership-analyst",
-    "promptDescription": "You are an analyst responsible for classification of user feedback in a car dealership.",
-    "researchPromptName": "car-dealership-researcher",
-    "researchPromptDescription": "You are a researcher responsible for answering queries regarding car dealership feedback. In case of questions not related to car dealership feedback politely refuse and explain this is beyond the scope of your responsibilities."
+    "classification": {
+        "model": "openai/gpt-5-mini",
+        "promptName": "car-dealership-analyst",
+        "promptDescription": "You are an analyst responsible for classification of user feedback in a car dealership."
+    },
+    "research": {
+        "model": "openai/gpt-5-mini",
+        "promptName": "car-dealership-researcher",
+        "promptDescription": "You are a researcher responsible for answering queries regarding car dealership feedback. In case of questions not related to car dealership feedback politely refuse and explain this is beyond the scope of your responsibilities.",
+        "embedding": {
+            "model": "qwen/qwen3-embedding-8b",
+            "dimensions": 4096,
+            "queryLimit": 5
+        }
+    }
 }
