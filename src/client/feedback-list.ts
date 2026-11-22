@@ -6,11 +6,11 @@ const message = document.getElementById('message') as HTMLParagraphElement;
 interface FeedbackListItem {
   processId: string;
   sentiment: string;
-  category: string;
-  subcategory: string;
+  category: string[];
+  subcategory: string[];
   summary: string;
   weight: number;
-  emotion: string;
+  emotion: string[];
   createdAt: string;
   content: string;
 }
@@ -19,6 +19,10 @@ function createCell(text: string): HTMLTableCellElement {
   const cell = document.createElement('td');
   cell.textContent = text;
   return cell;
+}
+
+function createListCell(values: string[]): HTMLTableCellElement {
+  return createCell(values.join(', '));
 }
 
 function createCreatedAtCell(createdAt: string): HTMLTableCellElement {
@@ -49,11 +53,11 @@ function createFeedbackRow(feedback: FeedbackListItem): HTMLTableRowElement {
     createCreatedAtCell(feedback.createdAt),
     processIdCell,
     createCell(feedback.sentiment),
-    createCell(feedback.category),
-    createCell(feedback.subcategory),
+    createListCell(feedback.category),
+    createListCell(feedback.subcategory),
     createCell(feedback.summary),
     createCell(String(feedback.weight)),
-    createCell(feedback.emotion),
+    createListCell(feedback.emotion),
     contentCell,
   );
   return row;

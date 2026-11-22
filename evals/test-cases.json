@@ -10,11 +10,11 @@
       },
       {
         "type": "javascript",
-        "value": "output.category === 'product,services-and-support'"
+        "value": "['product', 'services-and-support'].every(c => output.category.includes(c))"
       },
       {
         "type": "javascript",
-        "value": "['performance-and-driving', 'safety-concern', 'technology-and-features', 'vehicle-quality'].every(s => output.subcategory.split(',').includes(s))"
+        "value": "['performance-and-driving', 'safety-concern', 'technology-and-features', 'vehicle-quality'].every(s => output.subcategory.includes(s))"
       },
       {
         "type": "javascript",
@@ -26,11 +26,11 @@
       },
       {
         "type": "javascript",
-        "value": "['anger', 'disappointment', 'frustration'].every(e => output.emotion.split(',').includes(e))"
+        "value": "['anger', 'disappointment', 'frustration'].every(e => output.emotion.includes(e))"
       },
       {
         "type": "javascript",
-        "value": "!['trust', 'excitement', 'satisfaction', 'gratitude', 'relief'].some(e => output.emotion.split(',').includes(e))"
+        "value": "!['trust', 'excitement', 'satisfaction', 'gratitude', 'relief'].some(e => output.emotion.includes(e))"
       }
     ]
   },
@@ -45,11 +45,11 @@
       },
       {
         "type": "javascript",
-        "value": "output.category === 'finance,product'"
+        "value": "['finance', 'product'].every(c => output.category.includes(c))"
       },
       {
         "type": "javascript",
-        "value": "['financing-and-leasing', 'performance-and-driving', 'pricing-and-fees'].every(s => output.subcategory.split(',').includes(s))"
+        "value": "['financing-and-leasing', 'performance-and-driving', 'pricing-and-fees'].every(s => output.subcategory.includes(s))"
       },
       {
         "type": "javascript",
@@ -61,11 +61,11 @@
       },
       {
         "type": "javascript",
-        "value": "['frustration', 'satisfaction'].every(e => output.emotion.split(',').includes(e))"
+        "value": "['frustration', 'satisfaction'].every(e => output.emotion.includes(e))"
       },
       {
         "type": "javascript",
-        "value": "!['trust', 'disappointment', 'suspicion', 'gratitude', 'anger', 'relief', 'anxiety'].some(e => output.emotion.split(',').includes(e))"
+        "value": "!['disappointment', 'suspicion', 'gratitude', 'anger', 'relief', 'anxiety'].some(e => output.emotion.includes(e))"
       }
     ]
   },
@@ -80,11 +80,11 @@
       },
       {
         "type": "javascript",
-        "value": "output.category === 'product'"
+        "value": "output.category.includes('product')"
       },
       {
         "type": "javascript",
-        "value": "output.subcategory.split(',').every(s => ['performance-and-driving', 'selection-and-availability'].includes(s))"
+        "value": "output.subcategory.every(s => ['performance-and-driving', 'selection-and-availability'].includes(s))"
       },
       {
         "type": "javascript",
@@ -96,11 +96,11 @@
       },
       {
         "type": "javascript",
-        "value": "['excitement'].every(e => output.emotion.split(',').includes(e))"
+        "value": "['excitement'].every(e => output.emotion.includes(e))"
       },
       {
         "type": "javascript",
-        "value": "!['trust', 'frustration', 'satisfaction', 'disappointment', 'suspicion', 'gratitude', 'anger', 'relief', 'anxiety'].some(e => output.emotion.split(',').includes(e))"
+        "value": "!['trust', 'frustration', 'satisfaction', 'disappointment', 'suspicion', 'gratitude', 'anger', 'relief', 'anxiety'].some(e => output.emotion.includes(e))"
       }
     ]
   },
@@ -115,11 +115,11 @@
       },
       {
         "type": "javascript",
-        "value": "output.category === 'legal,services-and-support'"
+        "value": "['legal', 'services-and-support'].every(c => output.category.includes(c))"
       },
       {
         "type": "javascript",
-        "value": "['registration-and-documents'].every(s => output.subcategory.split(',').includes(s))"
+        "value": "['registration-and-documents'].every(s => output.subcategory.includes(s))"
       },
       {
         "type": "javascript",
@@ -131,11 +131,11 @@
       },
       {
         "type": "javascript",
-        "value": "['gratitude', 'relief', 'satisfaction', 'trust'].every(e => output.emotion.split(',').includes(e))"
+        "value": "['gratitude', 'relief', 'satisfaction', 'trust'].every(e => output.emotion.includes(e))"
       },
       {
         "type": "javascript",
-        "value": "!['frustration', 'excitement', 'disappointment', 'suspicion', 'anger', 'anxiety'].some(e => output.emotion.split(',').includes(e))"
+        "value": "!['frustration', 'excitement', 'disappointment', 'suspicion', 'anger', 'anxiety'].some(e => output.emotion.includes(e))"
       }
     ]
   },
@@ -150,11 +150,11 @@
       },
       {
         "type": "javascript",
-        "value": "output.category === 'finance,legal'"
+        "value": "['finance', 'legal'].every(c => output.category.includes(c))"
       },
       {
         "type": "javascript",
-        "value": "['financing-and-leasing'].every(s => output.subcategory.split(',').includes(s))"
+        "value": "['financing-and-leasing'].every(s => output.subcategory.includes(s))"
       },
       {
         "type": "javascript",
@@ -166,11 +166,11 @@
       },
       {
         "type": "javascript",
-        "value": "['excitement', 'frustration', 'relief', 'satisfaction'].every(e => output.emotion.split(',').includes(e))"
+        "value": "['excitement', 'frustration', 'relief', 'satisfaction'].every(e => output.emotion.includes(e))"
       },
       {
         "type": "javascript",
-        "value": "!['trust', 'disappointment', 'suspicion', 'gratitude', 'anger', 'anxiety'].some(e => output.emotion.split(',').includes(e))"
+        "value": "!['trust', 'disappointment', 'suspicion', 'gratitude', 'anger', 'anxiety'].some(e => output.emotion.includes(e))"
       }
     ]
   },
@@ -185,15 +185,11 @@
       },
       {
         "type": "javascript",
-        "value": "output.category === ''"
+        "value": "output.category.length === 0"
       },
       {
         "type": "javascript",
-        "value": "output.subcategory === ''"
-      },
-      {
-        "type": "javascript",
-        "value": "output.sentiment === ''"
+        "value": "output.subcategory.length === 0"
       },
       {
         "type": "javascript",
@@ -201,7 +197,7 @@
       },
       {
         "type": "javascript",
-        "value": "output.emotion === ''"
+        "value": "output.emotion.length === 0"
       }
     ]
   },
@@ -216,11 +212,11 @@
       },
       {
         "type": "javascript",
-        "value": "output.category === 'services-and-support'"
+        "value": "output.category.includes('services-and-support')"
       },
       {
         "type": "javascript",
-        "value": "output.subcategory.split(',').every(s => ['sales-experience', 'scheduling-and-communication'].includes(s))"
+        "value": "output.subcategory.every(s => ['sales-experience', 'scheduling-and-communication'].includes(s))"
       },
       {
         "type": "javascript",
@@ -232,11 +228,11 @@
       },
       {
         "type": "javascript",
-        "value": "['disappointment', 'frustration'].every(e => output.emotion.split(',').includes(e))"
+        "value": "['disappointment', 'frustration'].every(e => output.emotion.includes(e))"
       },
       {
         "type": "javascript",
-        "value": "!['trust', 'excitement', 'satisfaction', 'suspicion', 'gratitude', 'relief', 'anxiety'].some(e => output.emotion.split(',').includes(e))"
+        "value": "!['trust', 'excitement', 'satisfaction', 'suspicion', 'gratitude', 'relief', 'anxiety'].some(e => output.emotion.includes(e))"
       }
     ]
   },
@@ -251,11 +247,11 @@
       },
       {
         "type": "javascript",
-        "value": "output.category === 'services-and-support'"
+        "value": "output.category.includes('services-and-support')"
       },
       {
         "type": "javascript",
-        "value": "['maintenance-and-repair'].every(s => output.subcategory.split(',').includes(s))"
+        "value": "['maintenance-and-repair'].every(s => output.subcategory.includes(s))"
       },
       {
         "type": "javascript",
@@ -267,11 +263,11 @@
       },
       {
         "type": "javascript",
-        "value": "['gratitude', 'satisfaction'].every(e => output.emotion.split(',').includes(e))"
+        "value": "['gratitude', 'satisfaction'].every(e => output.emotion.includes(e))"
       },
       {
         "type": "javascript",
-        "value": "!['frustration', 'disappointment', 'suspicion', 'anger', 'anxiety'].some(e => output.emotion.split(',').includes(e))"
+        "value": "!['frustration', 'disappointment', 'suspicion', 'anger', 'anxiety'].some(e => output.emotion.includes(e))"
       }
     ]
   },
@@ -286,19 +282,15 @@
       },
       {
         "type": "javascript",
-        "value": "output.sentiment === ''"
+        "value": "output.category.length === 0"
       },
       {
         "type": "javascript",
-        "value": "output.category === ''"
+        "value": "output.subcategory.length === 0"
       },
       {
         "type": "javascript",
-        "value": "output.subcategory === ''"
-      },
-      {
-        "type": "javascript",
-        "value": "output.emotion === ''"
+        "value": "output.emotion.length === 0"
       }
     ]
   }

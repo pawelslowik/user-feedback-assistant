@@ -3,6 +3,10 @@
         "model": "openai/gpt-5-mini",
         "promptName": "car-dealership-analyst",
         "promptDescription": "You are an analyst responsible for classification of user feedback in a car dealership.",
+        "weight": {
+            "min": 0,
+            "max": 10
+        },
         "sentiments": [
             { "name": "positive" },
             { "name": "negative" },

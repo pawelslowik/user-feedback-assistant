@@ -1,11 +1,11 @@
 export type FeedbackClassification = {
     valid: boolean;
     sentiment: string;
-    category: string;
+    category: string[];
     summary: string;
     weight: number;
-    emotion: string;
-    subcategory: string;
+    emotion: string[];
+    subcategory: string[];
 };
 
 export type FeedbackResearchResult = {

@@ -10,6 +10,8 @@ import { queryFeedbackEmbedding } from "../db.js";
 const SENTIMENTS: string[] = config.classification.sentiments.map(s => s.name);
 const CATEGORIES: string[] = config.classification.categories.map(c => c.name);
 const EMOTIONS: string[] = config.classification.emotions.map(e => e.name);
+const WEIGHT_MIN: number = config.classification.weight.min;
+const WEIGHT_MAX: number = config.classification.weight.max;
 
 async function getSubcategories(categories: string[]): Promise<Subcategory[]> {
     const subcategories: Subcategory[] = config.classification.categories
@@ -156,12 +158,13 @@ export async function classifyFeedback(feedback: string): Promise<FeedbackClassi
 
     const feedbackClassificationSchema = z.object({
         valid: z.boolean(),
-        sentiment: z.string(),
-        category: z.string(),
-        subcategory: z.string(),
+        sentiment: z.enum(SENTIMENTS),
+        category: z.array(z.enum(CATEGORIES)),
+        // Not an enum on purpose: the model must call get-subcategories to learn the valid names
+        subcategory: z.array(z.string()),
         summary: z.string(),
-        weight: z.number(),
-        emotion: z.string()
+        weight: z.number().int().min(WEIGHT_MIN).max(WEIGHT_MAX),
+        emotion: z.array(z.enum(EMOTIONS))
     });
 
     const agentParams: AgentParams = {
@@ -173,7 +176,7 @@ export async function classifyFeedback(feedback: string): Promise<FeedbackClassi
     };
 
     const agentResponse = await runAgent(agentParams);
-    return JSON.parse(agentResponse) as FeedbackClassification;
+    return feedbackClassificationSchema.parse(JSON.parse(agentResponse));
 }
 
 export async function researchFeedback(query: string): Promise<FeedbackResearchResult> {
@@ -204,5 +207,5 @@ export async function researchFeedback(query: string): Promise<FeedbackResearchR
     };
 
     const agentResponse = await runAgent(agentParams);
-    return JSON.parse(agentResponse) as FeedbackResearchResult;
+    return feedbackResearchSchema.parse(JSON.parse(agentResponse));
 }

@@ -48,11 +48,11 @@ export type FeedbackItem = {
   processId: string;
   content: string;
   sentiment: string;
-  category: string;
-  subcategory: string;
+  category: string[];
+  subcategory: string[];
   summary: string;
   weight: number;
-  emotion: string;
+  emotion: string[];
 };
 
 export type FeedbackQueryResultItem = FeedbackItem & {
@@ -78,8 +78,17 @@ export type FeedbackEmbeddingQuery = {
   emotion?: string;
 };
 
+// Multi-value columns are stored as comma-separated TEXT, so the search filters can match them with LIKE
+function toDbList(values: string[]): string {
+  return [...values].sort().join(',');
+}
+
+function fromDbList(value: string): string[] {
+  return value ? value.split(',') : [];
+}
+
 export function insertFeedback(feedback: FeedbackItem): RunResult {
-  return insertStmt.run(feedback.content, feedback.sentiment, feedback.processId, feedback.category, feedback.subcategory, feedback.summary, feedback.weight, feedback.emotion);
+  return insertStmt.run(feedback.content, feedback.sentiment, feedback.processId, toDbList(feedback.category), toDbList(feedback.subcategory), feedback.summary, feedback.weight, toDbList(feedback.emotion));
 }
 
 export function queryFeedback(): FeedbackQueryResultItem[] {
@@ -87,11 +96,11 @@ export function queryFeedback(): FeedbackQueryResultItem[] {
     processId: row.process_id,
     content: row.content,
     sentiment: row.sentiment,
-    category: row.category,
-    subcategory: row.subcategory,
+    category: fromDbList(row.category),
+    subcategory: fromDbList(row.subcategory),
     summary: row.summary,
     weight: row.weight,
-    emotion: row.emotion,
+    emotion: fromDbList(row.emotion),
     createdAt: row.created_at
   }));
 }
