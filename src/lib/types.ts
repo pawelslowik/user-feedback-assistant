@@ -1,4 +1,5 @@
 export type FeedbackClassification = {
+    valid: boolean;
     sentiment: string;
     category: string;
     summary: string;

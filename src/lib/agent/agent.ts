@@ -173,11 +173,13 @@ export async function classifyFeedback(feedback: string): Promise<FeedbackClassi
         },
         {
             role: 'user',
-            content: `Classify the provided feedback: ${feedback}`,
+            // Strip the delimiter tags so the feedback can't close the block early
+            content: `Classify the provided feedback:\n<feedback>\n${feedback.replace(/<\/?feedback>/gi, "")}\n</feedback>`,
         },
     ];
 
     const feedbackClassificationSchema = z.object({
+        valid: z.boolean(),
         sentiment: z.string(),
         category: z.string(),
         summary: z.string(),

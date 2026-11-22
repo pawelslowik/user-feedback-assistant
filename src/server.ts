@@ -69,13 +69,21 @@ app.post('/api/feedbacks', async (req: Request<object, object, FeedbackBody>, re
       const classification = await classifyFeedback(feedback);
       console.log(`Classification [${JSON.stringify(classification)}] assigned to feedback [${feedback}] in process [${processId}]`);
 
-      insertFeedback({content: feedback, processId, ...classification});
-      const embedding = await embed(feedback, processId);
-      
-      span.update({
-        output: { processId, result: "Feedback processing completed", classification, embeddingDimension: embedding.length }
-      });
-      
+      if (!classification.valid) {
+        // TODO: store invalid feedback in separate table for human review
+        console.log(`Feedback in process [${processId}] is not valid feedback, skipping storage and embedding`);
+        span.update({
+          output: { processId, result: "Feedback rejected as invalid", classification }
+        });
+      } else {
+        insertFeedback({content: feedback, processId, ...classification});
+        const embedding = await embed(feedback, processId);
+
+        span.update({
+          output: { processId, result: "Feedback processing completed", classification, embeddingDimension: embedding.length }
+        });
+      }
+
     } catch (error) {
       console.error(error);
       span.update({
